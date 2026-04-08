@@ -1,0 +1,8 @@
+to color the text : start with '\x1b[' prefix then the color code like :
+31m: Red
+32m: Green
+33m: Yellow
+1m: Bold
+0m: Reset all styles
+96m: Bright cyan
+bold : put '1;' before the color code
