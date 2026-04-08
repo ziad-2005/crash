@@ -2,18 +2,28 @@ use std::io::{self, Write} ;
 use std::env ;
 use dirs::home_dir;
 use std::path::PathBuf;
+// use std::process;
+
 
 fn main() {
-    let prefix:String = get_prefix();
-    print!("{}",prefix);
-    io::stdout().flush().unwrap();
-    let mut input=String::new();
-    io::stdin().read_line(&mut input).expect("Failed to readline");
-    print!("{}",input);
+    let mut i = 10;
+    while i > 0 {
+        i-=1;
+        let prefix:String = get_prefix();
+        print!("\n{}",prefix);
+        io::stdout().flush().unwrap();
+        let mut input=String::new();
+        io::stdin().read_line(&mut input).expect("Failed to readline");
+        let input = input.trim();
+        if input == "exit"{
+            break;
+        }
+        print!("{}",input); // placeholder
+}
 
 
 
-    println!("exit")
+    //println!("exit") // bash style exit
 }
 
 fn get_prefix() -> String{
