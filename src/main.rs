@@ -1,32 +1,44 @@
-use std::io::{self, Write} ;
-use std::env ;
 use dirs::home_dir;
+use std::env;
+use std::io::{self, Write};
 use std::path::PathBuf;
 // use std::process;
-
-
+use std::process::Command;
 fn main() {
     let mut i = 10;
     while i > 0 {
-        i-=1;
-        let prefix:String = get_prefix();
-        print!("\n{}",prefix);
+        i -= 1;
+        let prefix: String = get_prefix();
+        print!("\n{}", prefix);
+
         io::stdout().flush().unwrap();
-        let mut input=String::new();
-        io::stdin().read_line(&mut input).expect("Failed to readline");
-        let input = input.trim();
-        if input == "exit"{
+        let mut input = String::new();
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to readline");
+        let input = input.trim(); // to remove the <Enter> character
+        if input == "exit" {
             break;
+        } else if input == "clear" {
+            Command::new("clear").status().unwrap();
+        } else if input == "mydistro" {
+            let contents = std::fs::read_to_string("/etc/os-release").unwrap();
+
+            for line in contents.lines() {
+                if line.starts_with("ID=") {
+                    println!("Distro: {}", line);
+                }
+            }
+        } else {
+            print!("{}", input);
         }
-        print!("{}",input); // placeholder
-}
-
-
+        // placeholder
+    }
 
     //println!("exit") // bash style exit
 }
 
-fn get_prefix() -> String{
+fn get_prefix() -> String {
     // Get the current directory
     let current_dir = env::current_dir().unwrap();
 
@@ -41,5 +53,5 @@ fn get_prefix() -> String{
         current_dir
     };
     let current_dir_str = display_path.display().to_string();
-    format!("\x1b[1;96m󰉋 {}\n❯ \x1b[0m",current_dir_str)
+    format!("\x1b[1;96m󰉋 {}\n❯ \x1b[0m", current_dir_str)
 }
