@@ -5,23 +5,25 @@ use std::path::PathBuf;
 // use std::process;
 use std::process::Command;
 fn main() {
-    let mut i = 10;
-    while i > 0 {
-        i -= 1;
+    loop {
         let prefix: String = get_prefix();
         print!("\n{}", prefix);
 
         io::stdout().flush().unwrap();
         let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to readline");
-        let input = input.trim(); // to remove the <Enter> character
-        if input == "exit" {
+        let bytes = io::stdin().read_line(&mut input).unwrap();
+
+        if bytes == 0 {
+            // Ctrl-D pressed (EOF)
+            println!("");
             break;
-        } else if input == "clear" {
+        }
+        let cmd = input.trim(); // to remove the <Enter> character
+        if cmd == "exit" {
+            break;
+        } else if cmd == "clear" {
             Command::new("clear").status().unwrap();
-        } else if input == "mydistro" {
+        } else if cmd == "mydistro" {
             let contents = std::fs::read_to_string("/etc/os-release").unwrap();
 
             for line in contents.lines() {
@@ -30,7 +32,6 @@ fn main() {
                 }
             }
         } else {
-            print!("{}", input);
         }
         // placeholder
     }
